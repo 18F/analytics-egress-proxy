@@ -1,0 +1,43 @@
+on:
+  push:
+
+jobs:
+  deploy_dev:
+    if: github.ref == 'refs/heads/develop'
+    uses: 18F/analytics-egress-proxy/.github/workflows/deploy.yml@develop
+    with:
+      APP_NAME: ${{ vars.APP_NAME_DEV }}
+      CF_ORGANIZATION_NAME: ${{ vars.CF_ORGANIZATION_NAME }}
+      CF_SPACE_NAME: ${{ vars.CF_SPACE_NAME }}
+      PROXY_PORT: ${{ vars.PROXY_PORT }}
+    secrets:
+      CF_USERNAME: ${{ secrets.CF_USERNAME }}
+      CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+      PROXY_USERNAME: ${{ secrets.PROXY_USERNAME_DEV }}
+      PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD_DEV }}
+  deploy_stg:
+    if: github.ref == 'refs/heads/staging'
+    uses: 18F/analytics-egress-proxy/.github/workflows/deploy.yml@develop
+    with:
+      APP_NAME: ${{ vars.APP_NAME_STG }}
+      CF_ORGANIZATION_NAME: ${{ vars.CF_ORGANIZATION_NAME }}
+      CF_SPACE_NAME: ${{ vars.CF_SPACE_NAME }}
+      PROXY_PORT: ${{ vars.PROXY_PORT }}
+    secrets:
+      CF_USERNAME: ${{ secrets.CF_USERNAME }}
+      CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+      PROXY_USERNAME: ${{ secrets.PROXY_USERNAME_STG }}
+      PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD_STG }}
+  deploy_prd:
+    if: github.ref == 'refs/heads/master'
+    uses: 18F/analytics-egress-proxy/.github/workflows/deploy.yml@develop
+    with:
+      APP_NAME: ${{ vars.APP_NAME_PRD }}
+      CF_ORGANIZATION_NAME: ${{ vars.CF_ORGANIZATION_NAME }}
+      CF_SPACE_NAME: ${{ vars.CF_SPACE_NAME }}
+      PROXY_PORT: ${{ vars.PROXY_PORT }}
+    secrets:
+      CF_USERNAME: ${{ secrets.CF_USERNAME }}
+      CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
+      PROXY_USERNAME: ${{ secrets.PROXY_USERNAME_PRD }}
+      PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD_PRD }}
