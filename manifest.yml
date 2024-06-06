@@ -10,4 +10,6 @@ applications:
     PROXY_PORT: ${PROXY_PORT}
     PROXY_USERNAME: ${PROXY_USERNAME}
     PROXY_PASSWORD: ${PROXY_PASSWORD}
+  routes:
+  - route: analytics-egress-proxy-${ENVIRONMENT}.apps.internal
   stack: cflinuxfs4

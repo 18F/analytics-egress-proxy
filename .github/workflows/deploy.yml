@@ -10,6 +10,9 @@ on:
       CF_SPACE_NAME:
         required: true
         type: string
+      ENVIRONMENT:
+        required: true
+        type: string
       PROXY_PORT:
         required: true
         type: string
@@ -17,6 +20,10 @@ on:
       CF_USERNAME:
         required: true
       CF_PASSWORD:
+        required: true
+      PROXY_CERT:
+        required: true
+      PROXY_KEY:
         required: true
       PROXY_USERNAME:
         required: true
@@ -29,12 +36,15 @@ env:
   CF_PASSWORD: ${{ secrets.CF_PASSWORD }}
   CF_ORGANIZATION_NAME: ${{ inputs.CF_ORGANIZATION_NAME }}
   CF_SPACE_NAME: ${{ inputs.CF_SPACE_NAME }}
+  ENVIRONMENT: ${{ inputs.ENVIRONMENT }}
   PROXY_PORT: ${{ inputs.PROXY_PORT }}
+  PROXY_CERT: ${{ secrets.PROXY_CERT }}
+  PROXY_KEY: ${{ secrets.PROXY_KEY }}
   PROXY_USERNAME: ${{ secrets.PROXY_USERNAME }}
   PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD }}
 
 jobs:
-  deploy_reporter:
+  deploy_egress_proxy:
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
@@ -48,11 +58,13 @@ jobs:
           mv manifest.yml manifest.yml.src
           envsubst < manifest.yml.src > manifest.yml
           cat manifest.yml
+          ls -al
       - name: Login to cloud.gov and deploy
         run: |
           set -e
           # Log into cloud.gov
           cf api api.fr.cloud.gov
           cf login -u $CF_USERNAME -p $CF_PASSWORD -o $CF_ORGANIZATION_NAME -s $CF_SPACE_NAME
+          # Deploy app
           cf push -f "./manifest.yml"
           cf logout
