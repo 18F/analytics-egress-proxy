@@ -4,6 +4,7 @@
     format json
     level debug
   }
+  admin off
   auto_https off
 }
 
