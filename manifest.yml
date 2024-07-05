@@ -1,0 +1,15 @@
+applications:
+- name: ${APP_NAME}
+  instances: 1
+  memory: 256M
+  disk_quota: 256M
+  buildpacks:
+  - binary_buildpack
+  command: exec ./caddy run --config ./Caddyfile
+  env:
+    PROXY_PORT: ${PROXY_PORT}
+    PROXY_USERNAME: ${PROXY_USERNAME}
+    PROXY_PASSWORD: ${PROXY_PASSWORD}
+  routes:
+  - route: analytics-egress-proxy-${ENVIRONMENT}.apps.internal
+  stack: cflinuxfs4
