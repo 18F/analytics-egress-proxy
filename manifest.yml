@@ -1,7 +1,7 @@
 applications:
 - name: ${APP_NAME}
-  instances: 1
-  memory: 256M
+  instances: 2
+  memory: 128M
   disk_quota: 256M
   buildpacks:
   - binary_buildpack

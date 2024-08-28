@@ -10,23 +10,26 @@
 
 :{$PROXY_PORT} {
   route {
-		# Act as a forward proxy for incoming requests
+    # Act as a forward proxy for incoming requests
     forward_proxy {
       # Require a username/password on requests to this server to attempt to
-			# prevent non-application requests to this server. (Provided at deploy
-			# time to both this server and the application instances.)
+      # prevent non-application requests to this server. (Provided at deploy
+      # time to both this server and the application instances.)
       basic_auth {$PROXY_USERNAME} {$PROXY_PASSWORD}
-			# Only allow outgoing requests to be made to an IP/domain using port 443
+
+      # Only allow outgoing requests to be made to an IP/domain using port 443
       ports 443
-			# Don't send the request originator's IP as a "Forwarded for" header to
-			# prevent application IPs from leaking to network traffic listeners.
-			hide_ip
+
+      # Don't send the request originator's IP as a "Forwarded for" header to
+      # prevent application IPs from leaking to network traffic listeners.
+      hide_ip
+
       acl {
-			  # Only allow requests to domains that the analytics.usa.gov application
+        # Only allow requests to domains that the analytics.usa.gov application
         # components need to access on the public internet. Deny requests to
         # all other domains
-	      allow *.amazonaws.com *.googleapis.com
-				deny all
+        allow *.amazonaws.com *.googleapis.com
+        deny all
       }
     }
   }
