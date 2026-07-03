@@ -1,8 +1,24 @@
 on:
   push:
+  pull_request:
 
 jobs:
+  validate_config:
+    runs-on: ubuntu-latest
+    env:
+      PROXY_PORT: 8080
+      PROXY_USERNAME: ci-user
+      PROXY_PASSWORD: ci-password
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v4
+      - name: Validate Caddyfile formatting
+        run: ./caddy fmt --diff ./Caddyfile
+      - name: Validate Caddyfile config
+        run: ./caddy validate --config ./Caddyfile
+
   deploy_dev:
+    needs: validate_config
     if: github.ref == 'refs/heads/develop'
     uses: 18F/analytics-egress-proxy/.github/workflows/deploy.yml@develop
     with:
@@ -19,6 +35,7 @@ jobs:
       PROXY_USERNAME: ${{ secrets.PROXY_USERNAME_DEV }}
       PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD_DEV }}
   deploy_stg:
+    needs: validate_config
     if: github.ref == 'refs/heads/staging'
     uses: 18F/analytics-egress-proxy/.github/workflows/deploy.yml@develop
     with:
@@ -35,6 +52,7 @@ jobs:
       PROXY_USERNAME: ${{ secrets.PROXY_USERNAME_STG }}
       PROXY_PASSWORD: ${{ secrets.PROXY_PASSWORD_STG }}
   deploy_prd:
+    needs: validate_config
     if: github.ref == 'refs/heads/master'
     uses: 18F/analytics-egress-proxy/.github/workflows/deploy.yml@develop
     with:
