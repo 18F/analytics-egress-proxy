@@ -28,7 +28,7 @@
         # Only allow requests to domains that the analytics.usa.gov application
         # components need to access on the public internet. Deny requests to
         # all other domains
-        allow *.amazonaws.com *.googleapis.com
+        allow *.amazonaws.com *.googleapis.com *.newrelic.com
         deny all
       }
     }
